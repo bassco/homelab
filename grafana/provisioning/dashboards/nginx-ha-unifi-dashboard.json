@@ -1,0 +1,106 @@
+{
+  "id": null,
+  "uid": "local-obs",
+  "title": "NGINX + Home Assistant + UniFi",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Prometheus Targets Up",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "up",
+          "legendFormat": "{{instance}}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "NGINX Requests per Second",
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "rate(nginx_http_requests_total[1m])",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "NGINX Active Connections",
+      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "nginx_connections_active",
+          "legendFormat": "active"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Home Assistant Events Fired",
+      "gridPos": { "x": 0, "y": 10, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "rate(homeassistant_event_fire_total[1m])",
+          "legendFormat": "{{event_type}}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Home Assistant States",
+      "gridPos": { "x": 12, "y": 10, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "homeassistant_states",
+          "legendFormat": "{{entity}}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "UniFi Clients Connected",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "unifi_clients{site=\"default\"}",
+          "legendFormat": "{{ap}}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "UniFi WLAN Usage (Bytes)",
+      "gridPos": { "x": 12, "y": 16, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "rate(unifi_wlan_bytes_total[5m])",
+          "legendFormat": "{{wlan}}"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+    "__inputs": [
+    {
+      "name": "prometheus",
+      "label": "Prometheus",
+      "description": "Standard Prometheus datasource",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}
+

@@ -1,0 +1,91 @@
+- id: '1734642518058'
+  alias: Balcony off
+  description: Switch balcony lights off
+  triggers:
+  - trigger: sun
+    event: sunset
+    offset: '4:30:00'
+  - trigger: time
+    at: '23:00:00'
+  conditions: []
+  actions:
+  - type: turn_off
+    device_id: 468fb68133f9ce93348f885023f295e2
+    entity_id: 68c2c71371370916c1d56dd2051b0b40
+    domain: switch
+  - type: turn_off
+    device_id: 6d4cf925a04b2be778f595386445760e
+    entity_id: 302a936d35a3a277801821f8c6f56ea6
+    domain: switch
+  mode: single
+- id: '1734876431735'
+  alias: Sunset Fairy Light
+  description: Turn balcony fairy lights on at sunset and off at 11 pm
+  triggers:
+  - trigger: sun
+    event: sunset
+    offset: -00:5:00
+    id: turn_on
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      device_id: 468fb68133f9ce93348f885023f295e2
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      device_id: 6d4cf925a04b2be778f595386445760e
+  mode: single
+- id: '1735397794549'
+  alias: Entrance Light on
+  description: ''
+  triggers:
+  - type: motion
+    device_id: a53eb543e85b71e7c36232f5dfb224ce
+    entity_id: 7c655e7408fde1e870a29245bffe2f12
+    domain: binary_sensor
+    trigger: device
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  conditions: []
+  actions:
+  - type: turn_on
+    device_id: 3208b77d20717b7dabde6d250e62ea7e
+    entity_id: cb192345e9037b9181d87f44d1815863
+    domain: light
+    brightness_pct: 40
+    flash: short
+  mode: single
+- id: '1735397941264'
+  alias: Entrance Light off
+  description: ''
+  triggers:
+  - type: no_motion
+    device_id: a53eb543e85b71e7c36232f5dfb224ce
+    entity_id: 7c655e7408fde1e870a29245bffe2f12
+    domain: binary_sensor
+    trigger: device
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  conditions: []
+  actions:
+  - type: turn_off
+    device_id: 3208b77d20717b7dabde6d250e62ea7e
+    entity_id: cb192345e9037b9181d87f44d1815863
+    domain: light
+  mode: single
+- id: '1739004978440'
+  alias: DiningTable Button
+  description: ''
+  use_blueprint:
+    path: niro1987/zha_ikea_tradfri_5button_remote_white.yaml
+    input:
+      remote: cb02868e36ffc5e08de58f86e4feca3d
+      light: light.nabu_casa_ha_connect_zbt_1_dinnerlights

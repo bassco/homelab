@@ -1,0 +1,29 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# required for nginx reverse proxy
+http:
+  server_port: 8123
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.18.0.0/16     # Docker network subnet (adjust as needed)
+  server_host: 0.0.0.0  # must bind to all interfaces
+
+# OTA updates for the IKEA devices
+# zha:
+#  zigpy_config:
+#    ota:
+#      # Enable the disabled ikea
+#      extra_providers:
+#        - type: ikea
+#      # Keep the default OTA config but disable SONOFF
+#      disable_default_providers: [sonoff]

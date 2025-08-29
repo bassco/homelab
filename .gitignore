@@ -1,0 +1,17 @@
+secrets
+ca
+**/certs
+**/log
+**/logs
+**/backup
+**/grafana.db
+!unifi/data/db/previous_version
+!unifi/data/db/version
+!unifi/data/system.properties
+unifi
+grafana/plugins
+!hassio/config/automations.yaml
+!hassio/config/scenes.yaml
+!hassio/config/scripts.yaml
+!hassio/config/configuration.yaml
+hassio

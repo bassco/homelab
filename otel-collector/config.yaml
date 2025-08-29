@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: "self"
+          static_configs:
+            - targets: ["0.0.0.0:9464"]
+#        - job_name: "otel-nginx"
+#          static_configs:
+#            - targets: ["nginx:8080"]  # if you run nginx exporter
+
+processors:
+  batch:
+
+exporters:
+  debug: {}
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [batch]
+      exporters: [prometheus]
+

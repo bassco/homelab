@@ -1,0 +1,13 @@
+$ORIGIN homelab.int.
+@         IN  SOA dns.homelab.int. andrew.bassco.co.za. 2508291353 7200 3600 1209600 3600
+
+
+dns                IN  A   192.168.1.30
+
+v24                IN A     192.168.1.31
+homeassistant      IN CNAME dns
+unifi              IN CNAME dns
+guardian           IN CNAME dns
+prometheus         IN CNAME dns
+grafana            IN CNAME dns
+switchwire         IN A     192.168.1.14
