@@ -4,12 +4,15 @@ ca
 **/log
 **/logs
 **/backup
-**/grafana.db
+grafana/grafana.db
 !unifi/data/db/previous_version
 !unifi/data/db/version
 !unifi/data/system.properties
 unifi
 grafana/plugins
+grafana/csv
+grafana/pdf
+grafana/png
 !hassio/config/automations.yaml
 !hassio/config/scenes.yaml
 !hassio/config/scripts.yaml
