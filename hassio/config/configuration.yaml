@@ -15,7 +15,7 @@ http:
   server_port: 8123
   use_x_forwarded_for: true
   trusted_proxies:
-    - 172.18.0.0/16     # Docker network subnet (adjust as needed)
+    - 172.0.0.0/8     # Docker network subnet (adjust as needed)
   server_host: 0.0.0.0  # must bind to all interfaces
 
 # OTA updates for the IKEA devices
