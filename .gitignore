@@ -15,3 +15,5 @@ grafana/plugins
 !hassio/config/scripts.yaml
 !hassio/config/configuration.yaml
 hassio
+grafana_data
+prometheus_data
