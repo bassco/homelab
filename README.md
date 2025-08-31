@@ -40,7 +40,6 @@ sudo systemctl start docker
 sudo systemctl status docker
 sudo rsync -a /var/snap/docker/common/var-lib-docker/ /var/lib/docker/
 sudo snap remove docker
-/usr/bin/docker compose up -d coredns # get the dns up and running again, first
 /usr/bin/docker compose up -d # bring up the rest of the stack
 ```
 
@@ -56,19 +55,56 @@ Router updated to use the ip address of the host running the docker container of
 Added prometheus and cache plgins to the Corefile.
 Change the local machine to use CoreDNS.
 
+Install coredns
+
+```shell
+sudo mkdir /etc/coredns
+sudo cp coredns/* /etc/coredns/
+wget https://github.com/coredns/coredns/releases/download/v1.12.3/coredns_1.12.3_linux_amd64.tgz
+mv coredns_1.12.3_linux_amd64.tgz /tmp
+tar xzf -C /tmp coredns_1.12.3_linux_amd64.tgz
+chmod +x /tmp/coredns
+sudo mv /tmp/coredns /usr/local/bin
+```
+
+Set the content of `/etc/systemd/system/coredns.service`
+
+```text
+[Unit]
+Description=CoreDNS DNS Server
+After=network.target
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/coredns -conf /etc/coredns/Corefile
+[Install]
+WantedBy=multi-user.target
+```
+
+Start the CoreDNS service
+
+```shell
+sudo systemctl daemon-reload
+sudo systemctl start coredns
+sudo systemctl status coredns
+sudo systemctl enable coredns
+```
+
+### change the local resolver to use coredns
+
 ```shell
 # edit  /etc/systemd/resolved.conf
 # set the below value
 DNSStubListener=no
 
-Then apply your changes by running the following command:
+# Then apply your changes by running the following command:
 
 sudo systemctl restart systemd-resolved
 ```
 
-You may need to also chage the `/etc/resolv.conf` file too
+You may need to also change the `/etc/resolv.conf` file too
 
-* DNS [reference]https://di-marco.net/blog/it/2024-05-09-Intall_and_configure_coredns/#disable-stub-resolver()
+* DNS [reference](https://di-marco.net/blog/it/2024-05-09-Intall_and_configure_coredns/#disable-stub-resolver()
+* CoreDNS [reference](https://ipv6.rs/tutorial/Ubuntu_Server_Latest/CoreDNS/)
 
 ## prometheus
 

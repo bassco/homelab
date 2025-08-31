@@ -47,21 +47,6 @@ services:
     networks:
       - proxy
 
-  # provides the homelab.int domain for home LAN
-  coredns:
-    image: coredns/coredns:latest
-    container_name: coredns
-    command: -conf /etc/coredns/Corefile -dns.port 53
-    expose:
-      - "53:53"
-      - "53:53/udp"
-      - "9080:8080"
-      - "9153:9153"
-    volumes:
-      - ./coredns/Corefile:/etc/coredns/Corefile
-      - ./coredns/db.homelab.int:/etc/coredns/db.homelab.int
-    network_mode: host
-
   controller:
     image: "jacobalberty/unifi:${TAG:-latest}"
     container_name: unifi
