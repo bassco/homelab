@@ -5,9 +5,6 @@ receivers:
         - job_name: "nginx"
           static_configs:
             - targets: ["nginx-exporter:9113"]
-        - job_name: "unpoller"
-          static_configs:
-            - targets: ["unpoller:9130"]
         - job_name: "homeassistant"
           static_configs:
             - targets: ["192.168.1.30:8123"]

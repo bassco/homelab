@@ -76,9 +76,12 @@ services:
     container_name: grafana
     restart: unless-stopped
     user: "472"
+    env_file:
+      - path: ./.env
+        required: true # default
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=/run/secrets/grafana_password
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD} # /run/secrets/grafana_password
       #- GF_USERS_ALLOW_SIGN_UP=false
     dns:
       - 192.168.1.30
@@ -86,10 +89,10 @@ services:
     volumes:
       - ./grafana_data:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - prometheus
     networks:
       - proxy
-    secrets:
-       - grafana_password
 
   # Prometheus
   prometheus:
@@ -140,6 +143,7 @@ services:
       - "9113:9113"
     depends_on:
       - nginx
+      - prometheus
     networks:
       - proxy
 
@@ -148,20 +152,26 @@ services:
     image: golift/unifi-poller:latest
     container_name: unpoller
     restart: unless-stopped
+    env_file:
+      - path: ./.env
+        required: true # default
     environment:
       - UP_UNIFI_DEFAULT_URL=https://192.168.1.30:8443
       - UP_UNIFI_DEFAULT_USER=unifipoller
-      - UP_UNIFI_DEFAULT_PASS=/run/secrets/unifi_password  # change me!
+      - UP_UNIFI_DEFAULT_PASS=${UNIFI_API_PASSWORD} # /run/secrets/unifi_password  # change me!
       - UP_PROMETHEUS_HTTP_LISTEN=0.0.0.0:9130
       - UP_PROMETHEUS_DISABLE=false
+      - UP_PROMETHEUS_NAMESPACE=unpoller
+      - UP_INFLUXDB_DISABLE=true
+      - UP_POLLER_DEBUG=false
+      - UP_UNIFI_DYNAMIC=false
     ports:
       - "9130:9130"
     depends_on:
       - controller
+      - prometheus
     networks:
       - monitoring
-    secrets:
-       - unifi_password
 
   # node exporter
   node-exporter:
@@ -201,9 +211,3 @@ services:
       - "--disable_metrics=percpu,sched,hugetlb,referenced_memory,resctrl,process"
     networks:
       - monitoring
-
-secrets:
-   grafana_password:
-     file: ./secrets/grafana_password.txt
-   unifi_password:
-     file: ./secrets/unifi_password.txt
