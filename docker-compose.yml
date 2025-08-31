@@ -1,6 +1,8 @@
 networks:
   proxy:
     driver: bridge
+  monitoring:
+    driver: bridge
 
 volumes:
     prometheus_data: {}
@@ -126,6 +128,7 @@ services:
       - 8.8.4.4
     networks:
       - proxy
+      - monitoring
 
   # OpenTelemetry Collector
   otel-collector:
@@ -139,7 +142,7 @@ services:
     depends_on:
       - prometheus
     networks:
-      - proxy
+      - monitoring
 
   # NGINX Prometheus Exporter
   nginx-exporter:
@@ -171,7 +174,7 @@ services:
     depends_on:
       - controller
     networks:
-      - proxy
+      - monitoring
     secrets:
        - unifi_password
 
@@ -190,6 +193,29 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--path.rootfs=/rootfs'
+
+  # cAdvisor for docker image metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: cadvisor
+    hostname: cadvisor
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk/:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    command:
+      - "--enable_metrics=cpu,memory,network,disk"
+      - "--docker_only=true"
+      - "--store_container_labels=false"
+      - "--housekeeping_interval=30s"
+      - "--disable_metrics=percpu,sched,hugetlb,referenced_memory,resctrl,process"
+    networks:
+      - monitoring
 
 secrets:
    grafana_password:

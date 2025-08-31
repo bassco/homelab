@@ -18,6 +18,26 @@ The nginx reverse proxy diagram.
 
 ![Alt text](./mermaid.svg)
 
+## changing from docker snap to native docker
+
+```shell
+sudo snap stop docker
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo systemctl status docker
+sudo rsync -a /var/snap/docker/common/var-lib-docker/ /var/lib/docker/
+sudo snap remove docker
+/usr/bin/docker compose up -d coredns # get the dns up and running again, first
+/usr/bin/docker compose up -d # bring up the rest of the stack
+```
+
 ## certificates for a homelab
 
 * Provision a CA. See the [gen-certs.sh](./gen-certs.sh) script.
@@ -43,6 +63,15 @@ sudo systemctl restart systemd-resolved
 You may need to also chage the `/etc/resolv.conf` file too
 
 * DNS [reference]https://di-marco.net/blog/it/2024-05-09-Intall_and_configure_coredns/#disable-stub-resolver()
+
+## prometheus
+
+### update the config for a live reload
+
+```shell
+curl --insecure -X POST https://prometheus.homelab.int/-/reload
+```
+
 ## grafana
 
 Reset the admin user pasword
@@ -52,7 +81,12 @@ docker compose exec grafana /bin/sh
 grafana cli admin reset-admin-password admin
 ```
 
-* coredns [dashboard](https://grafana.com/grafana/dashboards/15762-kubernetes-system-coredns/)
+* coredns [dashboard](https://grafana.com/grafana/dashboards/15762-kubernetes-system-coredns/).
+* node-exporter: import dashboard 1860 and set Job to `node-exporter`.
+
+## node--exporter
+
+Runs in host mode and therefore the prom scrape address needs to be the machine host IP address.
 
 ## references
 
