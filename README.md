@@ -18,6 +18,12 @@ The nginx reverse proxy diagram.
 
 ![Alt text](./mermaid.svg)
 
+## ubuntu upgrades
+
+```shell
+sudo apt-get --with-new-pkgs upgrade # upgrades held back packages
+```
+
 ## changing from docker snap to native docker
 
 ```shell
