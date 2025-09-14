@@ -1,0 +1,179 @@
+ cat ssh_config
+ sudo apt install -y powertop
+ sudo powertop
+ sudo apt install -y hdparm
+ hdparm
+ lshw -class disk
+ sudo apt install -y hwinfo
+ hwinfo --disk
+ lsblk -S
+ lsblk
+ lsblk -o NAME,FSTYPE,LABEL,MOUNTPOINT,SIZE,MODEL
+ sudo dhclient -r && sudo dhclient
+ sudo dhcpcd && sudo dhcpcd -k eth0
+ ifconfig
+ sudo dhcpcd && sudo dhcpcd -k eno1
+ apt list --upgradeable
+ grep -ir pagesize /proc/self/smaps|sort -u
+ sudo apt install ripgrep
+ vim configuration.yaml
+ mkdir storage
+ vim hassio.yml
+ ls -la /var/run/docker.sock
+ sudo chown root:docker /var/run/docker.sock
+ sudo docker compose up -d
+ sudo mkdir nginx/logs
+ sudo mkdir nginx/conf.d
+ sudo mkdir nginx/certs
+ sudo vim nginx/conf.d/reverse-proxy.conf
+ newgrp docker
+ docker compose up -d
+ tail -1 nginx/logs/error.log
+ docker compose restart nginx
+ docker network list
+ docker network inspect bashco_proxy
+# set http config for port 8123 for reverse proxy
+ vim hassio/config/configuration.yaml
+ docker compose restart homeassistant
+ mkdir coredns
+ cd coredns/
+ vim Corefile
+ vim db.homelab.int
+ chmod 644 *
+ cd ..
+ vim docker-compose.yml
+ docker compose up -d
+ docker compose logs coredns
+ vim coredns/db.homelab.int
+ vim coredns/Corefile
+ sudo netstat -taunp
+ sudo systemctl stop systemd-resolved
+ sudo netstat -taunp
+ docker compose up -d
+ docker compose logs coredns
+ dig @192.168.1.30 facebook.com
+ dig @192.168.1.30 homeassistant.homelab.int
+ dig @192.168.1.30 unifi.homelab.int
+ dig @192.168.1.30 v24.homelab.int
+ docker compose down homeassistant
+ docker compose down nginx
+ vim nginx/conf.d/reverse-proxy.conf
+ vim hassio/config/configuration.yaml
+ vim hassio/config/.storage/core.config
+ sudo vim hassio/config/.storage/core.config
+ sudo vim hassio/config/.storage/core.config_entries
+ docker compose up -d
+ dig homeassistant.homelab.int
+ curl -v homeassistant.homelab.int
+ curl -v https://homeassistant.homelab.int
+ docker compose logs nginx
+ sudo vim storage/nginx/conf.d/reverse-proxy.conf
+ curl -vI --insecure https://homeassistant.homelab.int
+ sudo ./gen-all-certs.sh
+ vim core.config_entries
+ sudo vim core.config_entries
+ sudo vim .hassio/config/.storage/core.config_entries
+ sudo groupadd docker
+ sudo usermod -aG docker ${USER}
+ newgrp docker
+ sudo systemctl disable systemd-resolved
+ sudo usermod -aG unifi ${USER}
+ newgrp unifi
+ sudo mv nginx-ha-unifi-dashboard.json dashboards/
+ sudo chown -R 472:472 .
+ ls -la
+ ls -la plugins/
+ docker compose stop grafana
+ docker compose up grafana -d
+ vim dashboards/nginx-ha-unifi-dashboard.json
+ sudo mkdir -p provisioning/dashboards
+ sudo vim provisioning/dashboards/dashboard.yaml
+ sudo chown -R 472:472 .
+ vim ~/docker-compose.yml
+ docker compose stop grafana
+ docker compose up grafana -d
+ ls -lR
+ sudo chown -R 472:472 .
+ ls -lR
+ ls -la ./dashboards
+ docker compose up -d
+ docker compose exec nginx ping unpoller
+ docker compose exec grafana ping unpoller
+ docker compose exec grafana ping prometheus
+ docker compose exec grafana ping otel-collector
+ vim storage/prometheus/prometheus.yml
+ docker compose exec nginx curl -s http://otel-collector:9464/metrics | head
+ sudo vim storage/prometheus/prometheus.yml
+ sudo vim storage/otel-collector/config.yaml
+ docker compose exec nginx curl -s http://nginx:8080 | head
+ docker compose exec nginx curl -s http://nginx-collector:8080 | head
+ docker compose exec nginx curl -v http://unpoller:9130/metrics
+ sudo vim storage/otel-collector/config.yaml
+ sudo vim storage/prometheus/prometheus.yml
+ vim docker-compose.yml
+ mkdir unifi
+ ./gen-certs.sh cert unifi.homelab.int
+ sudo ./gen-certs.sh cert unifi.homelab.int
+ sudo vim nginx/conf.d/reverse-proxy.conf
+ docker compose up -d
+ dig unifi.homelab.int
+ vim storage/coredns/db.homelab.int
+ sudo systemctl stop unifi
+ docker compose up -d controller
+ ls -laR storage/unifi/
+ vim ~/docker-compose.yml
+ TAG=9.3.45 docker compose up -d controller
+ less /var/lib/unifi/db/version
+ TAG=latest docker compose up -d controller
+ vim nginx/conf.d/reverse-proxy.conf
+ sudo vim nginx/conf.d/reverse-proxy.conf
+ sudo systemctl disable unifi
+ sudo ./gen-certs.sh cert grafana.homelab.int
+ sudo ./gen-certs.sh cert prometheus.homelab.int
+ sudo vim otel-collector/config.yaml
+ sudo vim prometheus/prometheus.yml
+ sudo vim grafana/dashboards/nginx-ha-unifi-dashboard.json
+ docker run --rm -v $(pwd)/otel-collector:/etc/otel otel/opentelemetry-collector-contrib:latest --config=/etc/otel/config.yaml -- --dry-run
+ sudo vim prometheus/prometheus.yml
+ sudo vim nginx/conf.d/reverse-proxy.conf
+ sudo vim ../coredns/db.homelab.int
+ docker restart coredns
+ docker logs nginx
+ sudo vim conf.d/reverse-proxy.conf
+ vim ~/docker-compose.yml
+ dig prometheus.homelab.int
+ dig grafana.homelab.int
+ docker logs nginx
+ docker exec -ti nginx /bin/sh
+ cat nginx/logs/access.log
+ cat nginx/logs/error.log
+ sudo chown -R 472:472 ./grafana
+ docker compose stop grafana
+ docker compose up grafana -d
+ docker logs grafana
+ docker logs nginx
+ vim ~/docker-compose.yml
+ docker compose exec nginx ping grafana
+ docker compose stop nginx
+ docker compose up nginx -d
+ docker logs grafana
+ docker compose exec nginx nginx -s reload
+ ls grafana/
+ cd grafana/
+ sudo groupadd grafana -g 472
+ sudo usermod -aG grafana ${USER}
+ newgrp grafana
+ sudo adduser --uid 472 --system --no-create-home --ingroup grafana grafana
+ vim docker-compose.yml
+ vim grafana/provisioning/dashboards/dashboard.yaml
+ vim grafana/dashboards/nginx-ha-unifi-dashboard.json
+ sudo systemctl status systemd-resolved
+ mkdir secrets
+ vim secrets/grafana_password.txt
+ vim secrets/unifi_password.txt
+ vim .gitignore
+ history |awk '{$1=""}1'
+ history |awk '{$1=""}1' |uniq -u > commands.txt
+# changed homelab zone to auto - no need for restart
+# sudo systemctl restart coredns
+sudo systemctl status coredns

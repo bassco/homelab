@@ -1,13 +1,14 @@
 $ORIGIN homelab.int.
-@         IN  SOA dns.homelab.int. andrew.bassco.co.za. 2508291353 7200 3600 1209600 3600
+@         IN  SOA dns.homelab.int. andrew.bassco.co.za. 2509141733 7200 3600 1209600 3600
 
 
-dns                IN  A   192.168.1.30
+dns                IN A   192.168.1.30
+switchwire         IN A   192.168.1.14
+v24                IN A   192.168.1.31
 
-v24                IN A     192.168.1.31
-homeassistant      IN CNAME dns
-unifi              IN CNAME dns
-guardian           IN CNAME dns
-prometheus         IN CNAME dns
+atuin              IN CNAME dns
 grafana            IN CNAME dns
-switchwire         IN A     192.168.1.14
+guardian           IN CNAME dns
+homeassistant      IN CNAME dns
+prometheus         IN CNAME dns
+unifi              IN CNAME dns

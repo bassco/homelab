@@ -10,4 +10,5 @@ homelab.int:53 {
     file /etc/coredns/db.homelab.int
     errors
     cache
+    reload
 }
